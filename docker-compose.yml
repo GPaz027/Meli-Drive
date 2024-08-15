@@ -1,0 +1,42 @@
+services:
+  app:
+    image: gonpaz/meli:1.0
+    secrets:
+      - smtp_password
+      - smtp_email
+      - mysql_root_user
+      - mysql_root_password
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app
+
+  mysql:
+    image: mysql:8.0
+    secrets:
+      - mysql_root_user
+      - mysql_root_password
+    environment:
+      MYSQL_ROOT_USER_FILE: /run/secrets/mysql_root_user
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: drive_files
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+
+secrets:
+  smtp_password:
+    external: true
+  smtp_email:
+    external: true
+  mysql_root_user:
+    external: true
+  mysql_root_password:
+    external: true
+
+volumes:
+  mysql_data:
