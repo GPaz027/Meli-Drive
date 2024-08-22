@@ -1,19 +1,16 @@
 # Google Drive Permissions & Log Application
 
-## Instrucciones de instalación
+## Instrucciones de uso
 
-1. El script puede ejecutarse de dos formas diferentes, separadas por dos archivos de Python. 
-    * **Uso personal (personal.py)**: En este caso el usuario deberá contar con su propia instancia de MySQL, así como con sus credenciales del mail emisor. En este caso, llenar las credenciales manualmente en el archivo de Python (mail y BD).
-    * **Uso de prueba (demo.py)**: En este caso, el mail emisor ya está seteado por secrets, y el Drive en donde se buscarán los archivos corresponde a una service account de Google Cloud.
-2. Para asegurar las credenciales se tuvo que utilizar Docker Stack, por lo que los secretos deben ser ingresados manualmente antes de empezar.
-    * `echo "PASSWORD" | docker secret create mysql_root_password -`
-    * `echo "USERNAME" | docker secret create mysql_root_username -`
-    * `echo "PASSWORD_EMAIL" | docker secret create smtp_password -`
-    * `echo "EMAIL" | docker secret create smtp_email -`
-3. Luego se puede buildear el Docker compose: `docker-compose build`
-4. Crear el stack `docker stack deploy -c docker-compose.yml meli`
-5. Ingresar al contenedor de Python y correr `python demo.py` o `python personal.py`
-
+1. Rellenar el archivo `.env` con las variables de entorno correspondientes (incluyendo la contraseña y password del mail emisor que notificará al dueño de los archivos de Drive el cambio de permisos. Este mail debe ser de hotmail/outlook por la API que usa SMTP, pero puede cambiarse a Google en la línea 180).
+2. Correr la aplicación con sus dos contenedores (Python y MySQL) con `docker-compose up`.
+3. Ingresar al contenedor de Python con `docker exec -it CONTAINER_ID bash`
+4. Correr el script desde dentro del contenedor con `python personal.py`
+5. Verá en la terminal que aparece un enlace a la API de Google, ingresar desde el navegador.
+6. Tras autenticarse, en la misma ventana del navegador aparecerá un código que se copiará y se pegará en la terminal del contenedor.
+7. El script debería llevar funcionar normalmente.
+8. Para revisar la base de datos, se puede acceder al contenedor de MySQL y utilizar MySQL CLI para hacer consultas, para eso `mysql -u USER -pPASSWORD`.
+9. En caso de tener archivos públicos, en la tabla `public_files` debería aparecer el registro. Además, debería el dueño del Drive debería haber recibido un correo del emisor configurado en el paso 1, informando el nombre del archivo que sufrió las modificaciones. Finalmente, los permisos del archivo deberían ser privados.
 
 ## Documentación consultada
 
