@@ -1,3 +1,4 @@
+import os
 import smtplib
 import mysql.connector
 from datetime import datetime
@@ -7,10 +8,16 @@ from email.mime.text import MIMEText
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 
+smtp_email = os.environ.get('SMTP_EMAIL')
+smtp_password = os.environ.get('SMTP_PASSWORD')
+mysql_host = os.environ.get('MYSQL_HOST')
+mysql_database = os.environ.get('MYSQL_DATABASE')
+mysql_user = os.environ.get('MYSQL_USER')
+mysql_password = os.environ.get('MYSQL_PASSWORD')
 
 def db_connection():
     try:
-        connection = mysql.connector.connect(host='localhost', database='drive_files', user='', password='')
+        connection = mysql.connector.connect(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
         if connection.is_connected():
             print('Conexion correcta')
             return connection
@@ -173,8 +180,8 @@ def send_notification_email(owner_email, file_name):
     smtp_server = 'smtp.office365.com'
     smtp_port = 587
 
-    sender_email = "MAIL"
-    sender_password = "PASSOWRD"
+    sender_email = smtp_email
+    sender_password = smtp_password
 
     msg = MIMEMultipart()
     msg['From'] = sender_email
@@ -198,9 +205,11 @@ connector = db_connection()
 
 # Autenticación
 gauth = GoogleAuth()
-gauth.LocalWebserverAuth() 
+
+gauth.CommandLineAuth()
 
 drive = GoogleDrive(gauth)
 
 if connector:
     main(connector)
+    
