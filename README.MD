@@ -10,7 +10,8 @@
 6. Tras autenticarse, en la misma ventana del navegador aparecerá un código que se copiará y se pegará en la terminal del contenedor.
 7. El script debería llevar funcionar normalmente.
 8. Para revisar la base de datos, se puede acceder al contenedor de MySQL y utilizar MySQL CLI para hacer consultas, para eso `mysql -u USER -pPASSWORD`.
-9. En caso de tener archivos públicos, en la tabla `public_files` debería aparecer el registro. Además, debería el dueño del Drive debería haber recibido un correo del emisor configurado en el paso 1, informando el nombre del archivo que sufrió las modificaciones. Finalmente, los permisos del archivo deberían ser privados.
+9. En caso de tener archivos públicos, en la tabla `public_files` (dentro de la BD llamada `drive_files` debería aparecer el registro. Además, debería el dueño del Drive debería haber recibido un correo del emisor configurado en el paso 1, informando el nombre del archivo que sufrió las modificaciones. Finalmente, los permisos del archivo deberían ser privados.
+10. Por su parte, todos los archivos se encuentran listados en la tabla `files`.
 
 ## Documentación consultada
 
